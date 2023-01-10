@@ -7,8 +7,8 @@
 ;(function($) {
   'use strict';
 
-  var Password = function ($object, options) {
-    var defaults = {
+  const Password = function ($object, options) {
+    const defaults = {
       enterPass: 'Type your password',
       shortPass: 'The password is too short',
       containsField: 'The password contains your username',
@@ -52,10 +52,10 @@
 
       score = score < 0 ? 0 : score;
 
-      var text = options.shortPass;
-      var sortedStepKeys = Object.keys(options.steps).sort();
-      for (var step in sortedStepKeys) {
-        var stepVal = sortedStepKeys[step];
+      let text = options.shortPass;
+      const sortedStepKeys = Object.keys(options.steps).sort();
+      for (const step in sortedStepKeys) {
+        const stepVal = sortedStepKeys[step];
         if (stepVal < score) {
           text = options.steps[stepVal];
         }
@@ -73,7 +73,7 @@
      * @return {int}
      */
     function calculateScore(password, field) {
-      var score = 0;
+      let score = 0;
 
       // password < options.minimumLength
       if (password.length < options.minimumLength) {
@@ -87,7 +87,7 @@
         }
         // password contains field (and fieldPartialMatch is set to true)
         if (options.fieldPartialMatch && field.length) {
-          var user = new RegExp(field.toLowerCase());
+          const user = new RegExp(field.toLowerCase());
           if (password.toLowerCase().match(user)) {
             return -2;
           }
@@ -107,7 +107,7 @@
       }
 
       // password has at least 2 symbols
-      var symbols = '.*[!,@,#,$,%,^,&,*,?,_,~]';
+      let symbols = '.*[!,@,#,$,%,^,&,*,?,_,~-]';
       symbols = new RegExp('(' + symbols + symbols + ')');
       if (password.match(symbols)) {
         score += 5;
@@ -124,12 +124,12 @@
       }
 
       // password has number and symbol
-      if (password.match(/([!@#$%^&*?_~])/) && password.match(/([0-9])/)) {
+      if (password.match(/([!@#$%^&*?_~-])/) && password.match(/([0-9])/)) {
         score += 15;
       }
 
       // password has char and symbol
-      if (password.match(/([!@#$%^&*?_~])/) && password.match(/([a-zA-Z])/)) {
+      if (password.match(/([!@#$%^&*?_~-])/) && password.match(/([a-zA-Z])/)) {
         score += 15;
       }
 
@@ -158,8 +158,8 @@
      * @return {string}
      */
     function checkRepetition(length, str) {
-      var res = "", repeated = false;
-      for (var i = 0; i < str.length; i++) {
+      let res = "", repeated = false;
+      for (let i = 0; i < str.length; i++) {
         repeated = true;
         for (var j = 0; j < length && (j + i + length) < str.length; j++) {
           repeated = repeated && (str.charAt(j + i) === str.charAt(j + i + length));
@@ -181,15 +181,15 @@
     /**
      * Calculates background colors from percentage value.
      *
-     * @param {int} perc The percentage strength of the password.
+     * @param {int} percent The percentage strength of the password.
      * @return {object} Object with colors as keys
      */
-    function calculateColorFromPercentage(perc) {
-      var minRed = 0;
-      var maxRed = 240;
-      var minGreen = 0;
-      var maxGreen = 240;
-      var blue = 10;
+    function calculateColorFromPercentage(percent) {
+      let minRed = 0;
+      let maxRed = 240;
+      let minGreen = 0;
+      let maxGreen = 240;
+      let blue = 10;
 
       if (Object.prototype.hasOwnProperty.call(options.customColorBarRGB, 'red')) {
         minRed = options.customColorBarRGB.red[0];
@@ -205,8 +205,8 @@
         blue = options.customColorBarRGB.blue;
       }
 
-      var green = (perc * maxGreen / 50);
-      var red = (2 * maxRed) - (perc * maxRed / 50);
+      const green = (percent * maxGreen / 50);
+      const red = (2 * maxRed) - (percent * maxRed / 50);
 
       return {
         red: Math.min(Math.max(red, minRed), maxRed),
@@ -216,30 +216,30 @@
     }
 
     /**
-     * Adds color styles to colorbar jQuery object.
+     * Adds color styles to colorBar jQuery object.
      *
-     * @param {jQuery} $colorbar The colorbar jquery object.
-     * @param {int} perc The percentage strength of the password.
+     * @param {jQuery} $colorBar The colorBar jquery object.
+     * @param {int} percent The percentage strength of the password.
      * @return {jQuery}
      */
-    function addColorBarStyle($colorbar, perc) {
+    function addColorBarStyle($colorBar, percent) {
       if (options.useColorBarImage) {
-        $colorbar.css({
-          backgroundPosition: "0px -" + perc + "px",
-          width: perc + '%'
+        $colorBar.css({
+          backgroundPosition: "0px -" + percent + "px",
+          width: percent + '%'
         });
       }
       else {
-        var colors = calculateColorFromPercentage(perc);
+        const colors = calculateColorFromPercentage(percent);
 
-        $colorbar.css({
+        $colorBar.css({
           'background-image': 'none',
           'background-color': 'rgb(' + colors.red.toString() + ', ' + colors.green.toString() + ', ' + colors.blue.toString() + ')',
-          width: perc + '%'
+          width: percent + '%'
         });
       }
 
-      return $colorbar;
+      return $colorBar;
     }
 
     /**
@@ -249,13 +249,13 @@
      * @return {Password} Returns the Password instance.
      */
     function init() {
-      var shown = true;
-      var $text = options.showText;
-      var $percentage = options.showPercent;
-      var $graybar = $('<div>').addClass('pass-graybar');
-      var $colorbar = $('<div>').addClass('pass-colorbar');
-      var $insert = $('<div>').addClass('pass-wrapper').append(
-        $graybar.append($colorbar)
+      let shown = true;
+      let $text = options.showText;
+      let $percentage = options.showPercent;
+      const $greyBar = $('<div>').addClass('pass-gray-bar');
+      let $colorBar = $('<div>').addClass('pass-color-bar');
+      const $insert = $('<div>').addClass('pass-wrapper').append(
+        $greyBar.append($colorBar)
       );
 
       $object.closest(options.closestSelector).addClass('pass-strength-visible');
@@ -278,23 +278,23 @@
       $object.closest(options.closestSelector).append($insert);
 
       $object.keyup(function() {
-        var field = options.field || '';
+        let field = options.field || '';
         if (field) {
           field = $(field).val();
         }
 
-        var score = calculateScore($object.val(), field);
+        const score = calculateScore($object.val(), field);
         $object.trigger('password.score', [score]);
-        var perc = score < 0 ? 0 : score;
+        const percent = score < 0 ? 0 : score;
 
-        $colorbar = addColorBarStyle($colorbar, perc);
+        $colorBar = addColorBarStyle($colorBar, percent);
 
         if (options.showPercent) {
-          $percentage.html(perc + '%');
+          $percentage.html(percent + '%');
         }
 
         if (options.showText) {
-          var text = scoreText(score);
+          let text = scoreText(score);
           if (!$object.val().length && score <= 0) {
             text = options.enterPass;
           }

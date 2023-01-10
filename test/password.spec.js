@@ -14,8 +14,8 @@ describe('$.fn.password', () => {
       $('#password').password()
       expect($('.pass-wrapper').length).toBeTruthy()
       expect($('.pass-wrapper').length).toBeTruthy()
-      expect($('.pass-colorbar').length).toBeTruthy()
-      expect($('.pass-graybar').length).toBeTruthy()
+      expect($('.pass-color-bar').length).toBeTruthy()
+      expect($('.pass-gray-bar').length).toBeTruthy()
       expect($('input + div.pass-wrapper').length).toBeTruthy()
       expect($('.pass-text').length).toBeTruthy()
     })
@@ -189,15 +189,15 @@ describe('$.fn.password', () => {
     it('uses no color background image by default', () => {
       $('#password').password()
 
-      expect('').toEqual($('.pass-colorbar').css('background-image'))
+      expect('').toEqual($('.pass-color-bar').css('background-image'))
     })
 
     it('makes background image style adjustments if turned on', () => {
       $('#password').password({useColorBarImage: true}).val('Tester23$').trigger('keyup')
-      $colorbar = $('.pass-colorbar')
+      $colorBar = $('.pass-color-bar')
 
-      expect('0px -91px').toEqual($colorbar.css('background-position'))
-      expect('91%').toEqual($colorbar.css('width'))
+      expect('0px -91px').toEqual($colorBar.css('background-position'))
+      expect('91%').toEqual($colorBar.css('width'))
     })
 
     it('can use custom rgb colorbar values for a good password', () => {
@@ -209,7 +209,7 @@ describe('$.fn.password', () => {
         }
       }).val('!Tester23$').trigger('keyup')
 
-      expect('rgb(10, 100, 50)').toEqual($('.pass-colorbar').css('background-color'))
+      expect('rgb(10, 100, 50)').toEqual($('.pass-color-bar').css('background-color'))
     })
 
     it('can use custom rgb colorbar values for a bad password', () => {
@@ -220,7 +220,7 @@ describe('$.fn.password', () => {
         }
       }).val('abc').trigger('keyup')
 
-      expect('rgb(150, 0, 10)').toEqual($('.pass-colorbar').css('background-color'))
+      expect('rgb(150, 0, 10)').toEqual($('.pass-color-bar').css('background-color'))
     })
   })
 })
